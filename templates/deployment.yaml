@@ -3,7 +3,14 @@ kind: Deployment
 metadata:
   name: print-var
 spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: print-var
   template:
+    metadata:
+      labels:
+        app: print-var
     spec:
       containers:
       - name: print-var
