@@ -2,6 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: print-var
+  namespace: kv-secrets
 spec:
   replicas: 1
   selector:
@@ -19,4 +20,7 @@ spec:
         args: ["echo My variable is: $MY_VARIABLE; sleep 3600"]
         env:
         - name: MY_VARIABLE
-          value: {{ .Values.myVariable | quote }}
+          valueFrom:
+            secretKeyRef:
+              name: imported-kv-secrets
+              key: mytoken
