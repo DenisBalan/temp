@@ -1,2 +1,3 @@
 myVariable: "from_values.yaml"
-myVariable2: "from_values2.yaml"
+myVariable2: <path:kv-secrets/imported-kv-secrets#mytoken>
+myVariable2x: "from_values2.yaml"
