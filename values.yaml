@@ -51,7 +51,6 @@ otel-collector-node:
     # enables the kubeletstatsreceiver and adds it to the metrics pipelines
     kubeletMetrics:
       enabled: true
-      insecure_skip_verify: true # to check???
     # Enables the filelogreceiver and adds it to the logs pipelines
     logsCollection:
       enabled: true
