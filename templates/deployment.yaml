@@ -17,10 +17,12 @@ spec:
       - name: print-var
         image: busybox
         command: ["/bin/sh", "-c"]
-        args: ["echo My variable is: $MY_VARIABLE; echo MY_VARIABLE_FROM_HELM is: $MY_VARIABLE_FROM_HELM; sleep 3600"]
+        args: ["echo My variable is: $MY_VARIABLE; echo MY_VARIABLE_FROM_HELM is: $MY_VARIABLE_FROM_HELM; echo MY_VARIABLE_FROM_HELM2 IS $MY_VARIABLE_FROM_HELM2; sleep 3600"]
         env: 
         - name: MY_VARIABLE_FROM_HELM 
           value: {{ .Values.myVariable | quote }}
+        - name: MY_VARIABLE_FROM_HELM2
+          value: {{ .Values.myVariable2 | quote }}
         - name: MY_VARIABLE
           valueFrom:
             secretKeyRef:
