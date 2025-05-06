@@ -1,3 +1,146 @@
 myVariable: "from_values.yaml"
 myVariable2: <path:kv-secrets:imported-kv-secrets#mytoken>
 myVariable2x: "from_values2.yaml"
+
+
+
+opentelemetry-operator:
+  manager:
+    collectorImage:
+      repository: otel/opentelemetry-collector-k8s
+
+opentelemetry:
+  exporters:
+    otlp:
+      endpoint:
+      headers:
+        Authorization:
+
+
+# Deamonset collector: https://opentelemetry.io/docs/platforms/kubernetes/getting-started/#daemonset-collector
+#
+# > The Daemonset installation of the collector will be used to collect telemetry emitted by services, logs, and metrics
+# > for nodes, pods, and containers.
+#
+# Helm currently has an issue (https://github.com/helm/helm/pull/12879) when using null to remove default configuration
+# from a subchart. The result is that you cannot remove default configuration from `config`, such as a specific receiver
+# or a specific pipeline, when the chart is used as a subchart.
+otel-collector-node:
+  mode: daemonset
+
+  image:
+    repository: otel/opentelemetry-collector-k8s
+
+  service:
+    enabled: false
+
+  presets:
+    # enables the k8sattributesprocessor and adds it to the traces, metrics, and logs pipelines
+    kubernetesAttributes:
+      enabled: true
+    # enables the kubeletstatsreceiver and adds it to the metrics pipelines
+    kubeletMetrics:
+      enabled: true
+    # Enables the filelogreceiver and adds it to the logs pipelines
+    logsCollection:
+      enabled: true
+
+  config:
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 15
+      batch:
+        send_batch_size: 10000
+        timeout: 10s
+      resource:
+        attributes:
+          - key: deployment.environment
+            action: upsert
+            value: 'blabla'
+          - key: service.name
+            action: insert
+            value: otel-collector-node
+
+    exporters:
+      otlp:
+        endpoint:
+        headers:
+          Authorization:
+
+    service:
+      pipelines:
+        traces:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
+        metrics:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
+        logs:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
+
+
+# Deployment collector: https://opentelemetry.io/docs/platforms/kubernetes/getting-started/#deployment-collector
+#
+# > The deployment installation of the collector will be used to collect metrics for the cluster and events.
+#
+# Helm currently has an issue (https://github.com/helm/helm/pull/12879) when using null to remove default configuration
+# from a subchart. The result is that you cannot remove default configuration from `config`, such as a specific receiver
+# or a specific pipeline, when the chart is used as a subchart.
+otel-collector-cluster:
+  mode: deployment
+
+  image:
+    repository: otel/opentelemetry-collector-k8s
+
+  service:
+    enabled: false
+
+  # We only want one of these collectors - any more and we'd produce duplicate data
+  replicaCount: 1
+
+  presets:
+    # enables the k8sclusterreceiver and adds it to the metrics pipelines
+    clusterMetrics:
+      enabled: true
+    # enables the k8sobjectsreceiver to collect events only and adds it to the logs pipelines
+    kubernetesEvents:
+      enabled: true
+
+  config:
+    processors:
+      memory_limiter:
+        check_interval: 1s
+        limit_percentage: 75
+        spike_limit_percentage: 15
+      batch:
+        send_batch_size: 10000
+        timeout: 10s
+      resource:
+        attributes:
+          - key: deployment.environment
+            action: upsert
+            value: 'blabla'
+          - key: service.name
+            action: insert
+            value: otel-collector-cluster
+
+    exporters:
+      otlp:
+        endpoint:
+        headers:
+          Authorization:
+
+    service:
+      pipelines:
+        traces:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
+        metrics:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
+        logs:
+          processors: [ memory_limiter, batch, resource ]
+          exporters: [ otlp ]
