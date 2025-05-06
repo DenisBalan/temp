@@ -7,7 +7,7 @@ myVariable2x: "from_values2.yaml"
 opentelemetry-operator:
   manager:
     collectorImage:
-      repository: docker.io/otel/opentelemetry-collector-k8s
+      repository: ghcr.io/otel/opentelemetry-collector-k8s
 
 opentelemetry:
   exporters:
@@ -16,6 +16,16 @@ opentelemetry:
       headers:
         Authorization:
 
+receivers:
+  otlp:
+    protocols:
+      grpc:
+        tls:
+          insecure: true
+      http:
+        tls:
+          insecure: true
+          
 
 # Deamonset collector: https://opentelemetry.io/docs/platforms/kubernetes/getting-started/#daemonset-collector
 #
@@ -29,7 +39,7 @@ otel-collector-node:
   mode: daemonset
 
   image:
-    repository: docker.io/otel/opentelemetry-collector-k8s
+    repository: ghcr.io/otel/opentelemetry-collector-k8s
 
   service:
     enabled: false
@@ -41,6 +51,7 @@ otel-collector-node:
     # enables the kubeletstatsreceiver and adds it to the metrics pipelines
     kubeletMetrics:
       enabled: true
+      insecure_skip_verify: true # to check???
     # Enables the filelogreceiver and adds it to the logs pipelines
     logsCollection:
       enabled: true
@@ -93,7 +104,7 @@ otel-collector-cluster:
   mode: deployment
 
   image:
-    repository: docker.io/otel/opentelemetry-collector-k8s
+    repository: ghcr.io/otel/opentelemetry-collector-k8s
 
   service:
     enabled: false
