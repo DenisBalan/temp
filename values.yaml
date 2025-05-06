@@ -7,7 +7,7 @@ myVariable2x: "from_values2.yaml"
 opentelemetry-operator:
   manager:
     collectorImage:
-      repository: ghcr.io/otel/opentelemetry-collector-k8s
+      repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
 
 opentelemetry:
   exporters:
@@ -39,7 +39,7 @@ otel-collector-node:
   mode: daemonset
 
   image:
-    repository: ghcr.io/otel/opentelemetry-collector-k8s
+    repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
 
   service:
     enabled: false
@@ -103,7 +103,7 @@ otel-collector-cluster:
   mode: deployment
 
   image:
-    repository: ghcr.io/otel/opentelemetry-collector-k8s
+    repository: ghcr.io/open-telemetry/opentelemetry-collector-releases/opentelemetry-collector-k8s
 
   service:
     enabled: false
