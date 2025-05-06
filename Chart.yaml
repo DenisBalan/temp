@@ -1,3 +1,15 @@
 apiVersion: v2
 name: my-chart
 version: 0.1.0
+dependencies:
+  - name: opentelemetry-operator
+    version: 0.86.4
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  - name: opentelemetry-collector
+    alias: otel-collector-cluster
+    version: 0.122.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
+  - name: opentelemetry-collector
+    alias: otel-collector-node
+    version: 0.122.0
+    repository: https://open-telemetry.github.io/opentelemetry-helm-charts
