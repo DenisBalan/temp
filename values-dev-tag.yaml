@@ -1,2 +1,2 @@
-myVariable: plain_asd
-myVariable2: plain_asd2
+myVariable: <path:kv-secrets:imported-kv-secrets#mytoken>
+myVariable2: <path:kv-secrets:imported-kv-secrets#other>
