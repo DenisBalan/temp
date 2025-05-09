@@ -1,2 +1,2 @@
-myVariable: <path:kv-secrets:imported-kv-secrets#mytoken>
-myVariable2: <path:kv-secrets:imported-kv-secrets#other>
+myVariable: <path:kv-secrets:imported-kv-secrets#global-environment>
+myVariable2: <path:kv-secrets:imported-kv-secrets#global-gitlabRegistryCredentials>
