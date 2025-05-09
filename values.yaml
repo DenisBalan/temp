@@ -1,5 +1,5 @@
 myVariable: "from_values.yaml"
-myVariable2: <path:kv-secrets:imported-kv-secrets#mytoken>
+myVariable2: <path:kv-secrets:imported-kv-secrets#global-environment>
 myVariable2x: "from_values2.yaml"
 
 
