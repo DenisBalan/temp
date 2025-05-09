@@ -27,4 +27,4 @@ spec:
           valueFrom:
             secretKeyRef:
               name: imported-kv-secrets
-              key: mytoken
+              key: global-environment
